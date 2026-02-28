@@ -1,39 +1,13 @@
-<<<<<<< HEAD
-import React, { useState, useRef } from 'react';
-import './Settings.css';
-
-export default function Settings(props) {
-    const [priorities, setPriorities] = useState(['Academics', 'Skill']);
-=======
 import React, { useState, useEffect } from 'react';
 import './Settings.css';
 
 export default function Settings({ onNavigate, onUserUpdate }) {
     const [priorities, setPriorities] = useState([]);
->>>>>>> feat/nimmi
     const [toggles, setToggles] = useState({
         autoAdjust: false,
         emailReminders: false,
         eventAlerts: false,
         weeklySummary: false,
-<<<<<<< HEAD
-        twoFactor: true
-    });
-
-    const handlePriorityClick = (key) => {
-        setPriorities(prev => {
-            const isRanked = prev.includes(key);
-            if (isRanked) {
-                // If it's already ranked, un-rank it
-                return prev.filter(p => p !== key);
-            } else {
-                // If it's not ranked, add it to the end of the ranked list (up to 3)
-                if (prev.length < 3) {
-                    return [...prev, key];
-                }
-                return prev; // If already 3 are ranked, do nothing
-            }
-=======
         twoFactor: false
     });
     const [profile, setProfile] = useState({ name: '', email: '', avatar: '' });
@@ -61,7 +35,6 @@ export default function Settings({ onNavigate, onUserUpdate }) {
             if (prev.includes(key)) return prev.filter(p => p !== key);
             if (prev.length < 3) return [...prev, key];
             return prev;
->>>>>>> feat/nimmi
         });
     };
 
@@ -69,13 +42,6 @@ export default function Settings({ onNavigate, onUserUpdate }) {
         setToggles(prev => ({ ...prev, [key]: !prev[key] }));
     };
 
-<<<<<<< HEAD
-    const getRankText = (index) => {
-        if (index === 0) return '1st';
-        if (index === 1) return '2nd';
-        if (index === 2) return '3rd';
-        return `${index + 1}th`;
-=======
     const getRankText = (index) => ['1st', '2nd', '3rd'][index] || '';
 
     const handleSaveChanges = async () => {
@@ -99,7 +65,6 @@ export default function Settings({ onNavigate, onUserUpdate }) {
         } catch (error) {
             console.error('Save failed:', error);
         }
->>>>>>> feat/nimmi
     };
 
     return (
@@ -122,29 +87,19 @@ export default function Settings({ onNavigate, onUserUpdate }) {
                             Navigation
                         </h2>
                         <ul className="list nav-list">
-<<<<<<< HEAD
-                            <li><a className="link nav-link" href="./index.html">Dashboard</a></li>
-                            <li><span className="nav-link active">Settings</span></li>
-=======
                             <li><a className="link nav-link" style={{ cursor: 'pointer' }} onClick={() => onNavigate('dashboard')}>Dashboard</a></li>
                             <li><span className="muted nav-link active">Settings</span></li>
->>>>>>> feat/nimmi
                         </ul>
                     </section>
                 </aside>
 
                 <section className="content settings-content">
                     <div className="card glass-card actionsBar-wrapper" id="actionsBar">
-<<<<<<< HEAD
-                        <button id="cancelBtn" className="cta cancel-cta">Cancel</button>
-                        <button id="saveBtn" className="cta primary-cta glow-btn">Save Changes</button>
-=======
                         <button id="cancelBtn" className="cta cancel-cta" onClick={() => onNavigate('dashboard')}>Cancel</button>
                         <button id="saveBtn" className="cta primary-cta glow-btn" onClick={async () => {
                             await handleSaveChanges();
                             onNavigate('dashboard');
                         }}>Save Changes</button>
->>>>>>> feat/nimmi
                     </div>
 
                     <section className="card glass-card">
@@ -162,30 +117,14 @@ export default function Settings({ onNavigate, onUserUpdate }) {
                                     width: '64px', height: '64px', borderRadius: '50%',
                                     background: 'radial-gradient(#8b5cf6, #6d28d9)', color: '#e0e7ff',
                                     display: 'grid', placeItems: 'center', fontWeight: '800', fontSize: '24px'
-<<<<<<< HEAD
-                                }}>BB</div>
-                                <div>
-                                    <h3 style={{ margin: 0, fontSize: '18px', color: 'var(--text)' }}>Bansilal</h3>
-                                    <div className="muted small">Student Account</div>
-=======
                                 }}>{profile.avatar || 'U'}</div>
                                 <div>
                                     <h3 style={{ margin: 0, fontSize: '18px', color: 'var(--text)' }}>{profile.name || 'User'}</h3>
                                     <div className="muted small">{profile.email}</div>
->>>>>>> feat/nimmi
                                 </div>
                             </div>
                             <div className="field input-field">
                                 <label htmlFor="nameInput">Name</label>
-<<<<<<< HEAD
-                                <input id="nameInput" type="text" placeholder="Your name" className="glass-input" />
-                                <div id="nameError" className="small error-message">Name is required</div>
-                            </div>
-                            <div className="field input-field">
-                                <label htmlFor="emailInput">University email</label>
-                                <input id="emailInput" type="email" placeholder="you@university.edu" className="glass-input" />
-                                <div id="emailError" className="small error-message">Enter a valid university email</div>
-=======
                                 <input
                                     id="nameInput"
                                     type="text"
@@ -198,7 +137,6 @@ export default function Settings({ onNavigate, onUserUpdate }) {
                             <div className="field input-field">
                                 <label htmlFor="emailInput">University email</label>
                                 <input id="emailInput" type="email" placeholder="you@university.edu" className="glass-input" value={profile.email} readOnly style={{ opacity: 0.7 }} />
->>>>>>> feat/nimmi
                             </div>
                         </div>
                     </section>
@@ -241,21 +179,11 @@ export default function Settings({ onNavigate, onUserUpdate }) {
                                         <label>Auto-adjust priorities</label>
                                         <span className="small muted">Dynamically adapt based on upcoming deadlines</span>
                                     </div>
-<<<<<<< HEAD
-                                    <div className="switch-group" style={{ width: 'auto' }}>
-                                        <label className="switch" htmlFor="autoAdjust">
-                                            <input id="autoAdjust" type="checkbox" checked={toggles.autoAdjust} onChange={() => handleToggle('autoAdjust')} />
-                                            <span className="slider round"></span>
-                                        </label>
-                                        <span id="autoAdjustLabel" className="status-label" style={{ color: toggles.autoAdjust ? 'var(--accent)' : 'var(--muted)' }}>{toggles.autoAdjust ? 'On' : 'Off'}</span>
-                                    </div>
-=======
                                     <label className="switch" htmlFor="autoAdjust">
                                         <input id="autoAdjust" type="checkbox" checked={toggles.autoAdjust} onChange={() => handleToggle('autoAdjust')} />
                                         <span className="slider round"></span>
                                     </label>
                                     <span className="status-label" style={{ color: toggles.autoAdjust ? 'var(--accent)' : 'var(--muted)' }}>{toggles.autoAdjust ? 'On' : 'Off'}</span>
->>>>>>> feat/nimmi
                                 </div>
                             </div>
                         </div>
@@ -271,46 +199,6 @@ export default function Settings({ onNavigate, onUserUpdate }) {
                             Notifications
                         </h2>
                         <div className="grid grid-3">
-<<<<<<< HEAD
-                            <div className="field toggle-field vertical-toggle">
-                                <div className="toggle-wrapper">
-                                    <label>Email reminders</label>
-                                    <div className="switch-group">
-                                        <label className="switch" htmlFor="toggleEmailReminders">
-                                            <input id="toggleEmailReminders" type="checkbox" checked={toggles.emailReminders} onChange={() => handleToggle('emailReminders')} />
-                                            <span className="slider round"></span>
-                                        </label>
-                                        <span id="labelEmailReminders" className="status-label" style={{ color: toggles.emailReminders ? 'var(--accent)' : 'var(--muted)' }}>{toggles.emailReminders ? 'On' : 'Off'}</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="field toggle-field vertical-toggle">
-                                <div className="toggle-wrapper">
-                                    <label>Event alerts</label>
-                                    <div className="switch-group">
-                                        <label className="switch" htmlFor="toggleEventAlerts">
-                                            <input id="toggleEventAlerts" type="checkbox" checked={toggles.eventAlerts} onChange={() => handleToggle('eventAlerts')} />
-                                            <span className="slider round"></span>
-                                        </label>
-                                        <span id="labelEventAlerts" className="status-label" style={{ color: toggles.eventAlerts ? 'var(--accent)' : 'var(--muted)' }}>{toggles.eventAlerts ? 'On' : 'Off'}</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="field toggle-field vertical-toggle">
-                                <div className="toggle-wrapper">
-                                    <label>Weekly summary</label>
-                                    <div className="switch-group">
-                                        <label className="switch" htmlFor="toggleWeeklySummary">
-                                            <input id="toggleWeeklySummary" type="checkbox" checked={toggles.weeklySummary} onChange={() => handleToggle('weeklySummary')} />
-                                            <span className="slider round"></span>
-                                        </label>
-                                        <span id="labelWeeklySummary" className="status-label" style={{ color: toggles.weeklySummary ? 'var(--accent)' : 'var(--muted)' }}>{toggles.weeklySummary ? 'On' : 'Off'}</span>
-                                    </div>
-                                </div>
-                            </div>
-=======
                             {[
                                 { id: 'emailReminders', label: 'Email reminders' },
                                 { id: 'eventAlerts', label: 'Event alerts' },
@@ -329,7 +217,6 @@ export default function Settings({ onNavigate, onUserUpdate }) {
                                     </div>
                                 </div>
                             ))}
->>>>>>> feat/nimmi
                         </div>
                     </section>
 
@@ -348,61 +235,19 @@ export default function Settings({ onNavigate, onUserUpdate }) {
                             </div>
                             <div className="field toggle-field">
                                 <div className="toggle-wrapper compact">
-<<<<<<< HEAD
-                                    <label htmlFor="toggleTwoFactor" className="security-label">Two-factor auth</label>
-                                    <div className="switch-group" style={{ width: 'auto' }}>
-                                        <label className="switch" htmlFor="toggleTwoFactor">
-                                            <input id="toggleTwoFactor" type="checkbox" checked={toggles.twoFactor} onChange={() => handleToggle('twoFactor')} />
-                                            <span className="slider round"></span>
-                                        </label>
-                                        <span id="labelTwoFactor" className="status-label" style={{ color: toggles.twoFactor ? 'var(--accent)' : 'var(--muted)' }}>{toggles.twoFactor ? 'On' : 'Off'}</span>
-                                    </div>
-=======
                                     <label htmlFor="toggle_twoFactor" className="security-label">Two-factor auth</label>
                                     <label className="switch" htmlFor="toggle_twoFactor">
                                         <input id="toggle_twoFactor" type="checkbox" checked={toggles.twoFactor} onChange={() => handleToggle('twoFactor')} />
                                         <span className="slider round"></span>
                                     </label>
                                     <span className="status-label" style={{ color: toggles.twoFactor ? 'var(--accent)' : 'var(--muted)' }}>{toggles.twoFactor ? 'On' : 'Off'}</span>
->>>>>>> feat/nimmi
                                 </div>
                             </div>
                         </div>
                     </section>
                 </section>
             </main>
-<<<<<<< HEAD
-
             <div id="toast" className="glass-toast"></div>
-
-            <dialog id="passwordModal" className="glass-modal">
-                <div className="modal-glow"></div>
-                <div className="modal-content">
-                    <h3 className="modal-title">Change Password</h3>
-                    <form id="passwordForm" method="dialog" className="modal-form">
-                        <div className="field input-field">
-                            <label htmlFor="currentPass">Current password</label>
-                            <input id="currentPass" type="password" className="glass-input" />
-                        </div>
-                        <div className="field input-field">
-                            <label htmlFor="newPass">New password</label>
-                            <input id="newPass" type="password" minLength="6" className="glass-input" />
-                        </div>
-                        <div className="field input-field">
-                            <label htmlFor="confirmPass">Confirm password</label>
-                            <input id="confirmPass" type="password" minLength="6" className="glass-input" />
-                            <div id="passError" className="small error-message">Passwords do not match</div>
-                        </div>
-                        <div className="modal-actions">
-                            <button id="closePassModal" type="button" className="cta cancel-cta">Cancel</button>
-                            <button id="submitPassModal" type="submit" className="cta primary-cta glow-btn">Update</button>
-                        </div>
-                    </form>
-                </div>
-            </dialog>
-=======
-            <div id="toast" className="glass-toast"></div>
->>>>>>> feat/nimmi
         </div>
     );
 }
