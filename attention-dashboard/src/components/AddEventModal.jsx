@@ -4,7 +4,7 @@ import './AddEventModal.css';
 export default function AddEventModal({ isOpen, onClose, onAdd, currentPoints }) {
     const [title, setTitle] = useState('');
     const [date, setDate] = useState('');
-    const [category, setCategory] = useState('Wellness');
+    const [category, setCategory] = useState('Academics');
     const [status, setStatus] = useState('Upcoming');
     const [priorities, setPriorities] = useState({});
 
@@ -89,11 +89,9 @@ export default function AddEventModal({ isOpen, onClose, onAdd, currentPoints })
                                 onChange={(e) => setCategory(e.target.value)}
                                 className="glass-input"
                             >
-                                <option>Wellness</option>
-                                <option>Academic</option>
-                                <option>Sport</option>
-                                <option>Social</option>
-                                <option>Other</option>
+                                <option>Academics</option>
+                                <option>Skills</option>
+                                <option>Culturals</option>
                             </select>
                         </div>
                         <div className="form-group">

@@ -327,7 +327,7 @@
       bar.className = 'bar';
       const fill = document.createElement('div');
       fill.className = 'bar-fill';
-      fill.style.width = `${Math.round((counts[cat]/max)*100)}%`;
+      fill.style.width = `${Math.round((counts[cat] / max) * 100)}%`;
       fill.style.background = '#f59e0b';
       bar.appendChild(fill);
       el.priorityBars.append(label, bar);
@@ -351,13 +351,13 @@
     if (!el.overviewChart) return;
     const days = 7;
     const w = 360, h = 100, pad = 6;
-    const step = (w - pad*2) / (days - 1);
+    const step = (w - pad * 2) / (days - 1);
     const series = user.dailyUsage && user.dailyUsage.length === days ? user.dailyUsage.slice() : Array(days).fill(0);
     const max = Math.max(...series, 1);
     function toPoints(mult = 1) {
       return series.map((val, i) => {
         const x = pad + i * step;
-        const y = h - pad - Math.round(((val * mult) / max) * (h - pad*2));
+        const y = h - pad - Math.round(((val * mult) / max) * (h - pad * 2));
         return `${x},${y}`;
       }).join(' ');
     }

@@ -8,7 +8,6 @@ import './App.css'
 import './index.css'
 
 export default function Dashboard({ onNavigate }) {
-  // ... existing state ...
   const [dashboardData, setDashboardData] = useState({
     profile: { name: '...', avatar: '?', email: '' },
     points: { current: 0, spent: 0, dailyWellness: 0 },
@@ -18,6 +17,7 @@ export default function Dashboard({ onNavigate }) {
     }
   });
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [notification, setNotification] = useState(null);
 
   useEffect(() => {
     // In production, token comes from AuthContext
@@ -45,6 +45,8 @@ export default function Dashboard({ onNavigate }) {
         body: JSON.stringify({ events: [event] })
       });
       if (res.ok) {
+        setNotification({ message: 'Event added successfully! 🎉', type: 'success' });
+        setTimeout(() => setNotification(null), 3000);
         // Refresh data
         const refreshRes = await fetch('http://localhost:5000/api/user/dashboard', {
           headers: { 'x-auth-token': token || '' }
@@ -54,6 +56,8 @@ export default function Dashboard({ onNavigate }) {
       }
     } catch (err) {
       console.error('Error adding event:', err);
+      setNotification({ message: 'Failed to add event. ❌', type: 'error' });
+      setTimeout(() => setNotification(null), 3000);
     }
   };
 
@@ -87,12 +91,12 @@ export default function Dashboard({ onNavigate }) {
     <div className="dashboard-container">
       <header className="topbar glass-card">
         <div className="brand">
-          <div className="logo">S</div>
           <span className="title">Attention Seekers</span>
         </div>
         <nav className="nav">
           <a className="active" style={{ cursor: 'pointer' }} onClick={() => onNavigate('dashboard')}>Dashboard</a>
           <a style={{ cursor: 'pointer' }} onClick={() => onNavigate('settings')}>Settings</a>
+          <a style={{ cursor: 'pointer', color: '#f87171' }} onClick={() => onNavigate('logout')}>Logout</a>
         </nav>
         <div className="topbar-actions">
           <div className="header-points-badge glass-card">
@@ -108,28 +112,39 @@ export default function Dashboard({ onNavigate }) {
       <main className="content">
         <section className="hero">
           <div className="hero-title">Hello {dashboardData.profile.name}!</div>
-          <div className="hero-subtitle">You have <span className="pts-highlight">{dashboardData.points.current} points</span> left to spend this week! 💎</div>
+          <div className="hero-subtitle">
+            You've spent <span className="pts-highlight">{dashboardData.points.spent} points</span> and have <span className="pts-highlight">{dashboardData.points.current} points</span> remaining this week! 💎
+          </div>
+          {dashboardData.points.current <= 50 && (
+            <div className="warning-banner glass-card">
+              <span className="warning-icon">⚠️</span>
+              <span className="warning-text">Half attention points left!</span>
+            </div>
+          )}
         </section>
         <div className="dashboard-grid">
           <div className="left-panel">
             <section className="stats-row">
               <StatCard
                 title="Weekly Allotment"
-                value="100"
-                subtitle="Starting budget"
+                value="100 pts"
+                subtitle="Points initially allocated"
                 className="allotment"
+                icon="💰"
               />
               <StatCard
                 title="Points Deducted"
-                value={dashboardData.points.spent.toLocaleString()}
-                subtitle="Spent on events"
+                value={`${(dashboardData.points.spent || 0).toLocaleString()} pts`}
+                subtitle="Points consumed by events"
                 className="spent"
+                icon="💸"
               />
               <StatCard
                 title="Remaining Balance"
-                value={dashboardData.points.current.toLocaleString()}
-                subtitle="Available now"
+                value={`${(dashboardData.points.current || 0).toLocaleString()} pts`}
+                subtitle="Points available to use"
                 className="remaining"
+                icon="💎"
               />
             </section>
             <section className="events-section">
@@ -168,6 +183,15 @@ export default function Dashboard({ onNavigate }) {
         <div>Privacy</div>
         <div className="social">ⓕ ⓣ ⓘ</div>
       </footer>
+
+      {notification && (
+        <div className={`notification-toast glass-card ${notification.type}`}>
+          <div className="toast-content">
+            <span className="toast-icon">{notification.type === 'success' ? '✅' : '❌'}</span>
+            <span className="toast-message">{notification.message}</span>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

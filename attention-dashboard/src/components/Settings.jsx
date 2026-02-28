@@ -60,10 +60,15 @@ export default function Settings({ onNavigate, onUserUpdate }) {
                     setProfile(data.profile);
                     if (onUserUpdate) onUserUpdate(data.profile);
                 }
+                return true;
+            } else {
+                alert(`Failed to save settings: ${data.error || data.msg || 'Unknown Error'}`);
+                return false;
             }
-            else alert('Failed to save settings.');
         } catch (error) {
             console.error('Save failed:', error);
+            alert('A network error occurred while saving.');
+            return false;
         }
     };
 
@@ -97,8 +102,8 @@ export default function Settings({ onNavigate, onUserUpdate }) {
                     <div className="card glass-card actionsBar-wrapper" id="actionsBar">
                         <button id="cancelBtn" className="cta cancel-cta" onClick={() => onNavigate('dashboard')}>Cancel</button>
                         <button id="saveBtn" className="cta primary-cta glow-btn" onClick={async () => {
-                            await handleSaveChanges();
-                            onNavigate('dashboard');
+                            const success = await handleSaveChanges();
+                            if (success) onNavigate('dashboard');
                         }}>Save Changes</button>
                     </div>
 
@@ -152,9 +157,16 @@ export default function Settings({ onNavigate, onUserUpdate }) {
                         </h2>
                         <div className="grid">
                             <div className="field priority-field col-span-full">
-                                <label>Priority Order</label>
+                                <div className="priority-header">
+                                    <label>Priority Order</label>
+                                    <div className="priority-actions">
+                                        <button className="clear-btn" onClick={() => setPriorities([])}>Clear</button>
+                                        <button className="edit-btn" onClick={handleSaveChanges}>Edit</button>
+                                    </div>
+                                </div>
+                                <p className="small muted" style={{ marginBottom: '12px' }}>Click the tags in the order of your preference (1st, 2nd, 3rd)</p>
                                 <div id="priorityTags" className="tags-container">
-                                    {['Academics', 'Skill', 'Networking'].map((key) => {
+                                    {['Academics', 'Skills', 'Culturals'].map((key) => {
                                         const index = priorities.indexOf(key);
                                         const isRanked = index !== -1;
                                         return (
