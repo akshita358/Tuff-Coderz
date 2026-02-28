@@ -1,4 +1,5 @@
 (() => {
+  const USER_STORAGE_KEY = 'dashboardUser';
   const PRIORITY_WEIGHTS = {
     5: 0.5,
     4: 0.4,
@@ -37,20 +38,49 @@
     overviewChart: document.getElementById('overviewChart'),
   };
 
+  const defaultUser = {
+    name: 'Alex',
+    weeklyBudget: 1500,
+    pointsUsed: 1180,
+    pointsLeft: 320,
+    priorities: ['Academics', 'Skill Development', 'Networking'],
+    events: [
+      { name: 'AI Seminar', duration: 1.5, alignment: 95, category: 'Academics' },
+      { name: 'Skill Workshop', duration: 2, alignment: 88, category: 'Skill Development' },
+      { name: 'Networking Mixer', duration: 1, alignment: 92, category: 'Networking' },
+    ],
+    dailyUsage: Array(7).fill(0),
+    eventsAttended: [],
+  };
+  function getUser() {
+    const raw = localStorage.getItem(USER_STORAGE_KEY);
+    return raw ? JSON.parse(raw) : { ...defaultUser };
+  }
+  function saveUser(u) {
+    localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(u));
+  }
+  let user = getUser();
+
   const storage = {
     getAllowance() {
-      const v = localStorage.getItem('weeklyAllowance');
+      const v = user.weeklyBudget;
       return v ? parseInt(v, 10) : 100;
     },
     setAllowance(v) {
-      localStorage.setItem('weeklyAllowance', String(v));
+      user.weeklyBudget = v;
+      const used = user.pointsUsed || 0;
+      user.pointsLeft = Math.max(0, v - used);
+      saveUser(user);
     },
     getRemaining() {
-      const v = localStorage.getItem('remainingPoints');
+      const v = user.pointsLeft;
       return v ? parseInt(v, 10) : storage.getAllowance();
     },
     setRemaining(v) {
-      localStorage.setItem('remainingPoints', String(v));
+      user.pointsLeft = v;
+      const allowance = storage.getAllowance();
+      user.pointsUsed = Math.max(0, allowance - v);
+      saveUser(user);
     },
     getEvents() {
       const v = localStorage.getItem('events');
@@ -89,7 +119,7 @@
   function hydrateState() {
     const allowance = storage.getAllowance();
     el.weeklyAllowance.value = String(allowance);
-    el.remainingPoints.textContent = String(storage.getRemaining());
+    animateNumber(el.remainingPoints, storage.getRemaining());
     updatePointsCost();
     renderLegend();
     renderStats();
@@ -101,6 +131,7 @@
   // Calendar setup
   let calendar;
   function initCalendar() {
+    if (typeof FullCalendar === 'undefined' || !el.calendar) return;
     calendar = new FullCalendar.Calendar(el.calendar, {
       initialView: 'dayGridMonth',
       height: 'auto',
@@ -139,10 +170,9 @@
       return;
     }
     storage.setAllowance(v);
-    // Recalculate remaining if it exceeded new allowance
     const remaining = storage.getRemaining();
     if (remaining > v) storage.setRemaining(v);
-    el.remainingPoints.textContent = String(storage.getRemaining());
+    animateNumber(el.remainingPoints, storage.getRemaining());
     updatePointsCost();
     renderStats();
     renderOverview();
@@ -151,7 +181,7 @@
   el.newWeek.addEventListener('click', () => {
     const allowance = storage.getAllowance();
     storage.setRemaining(allowance);
-    el.remainingPoints.textContent = String(allowance);
+    animateNumber(el.remainingPoints, allowance);
     alert('New week started. Remaining points reset to weekly allowance.');
     renderStats();
     renderOverview();
@@ -199,7 +229,7 @@
     saveCalendarEvents();
 
     storage.setRemaining(remaining - cost);
-    el.remainingPoints.textContent = String(storage.getRemaining());
+    animateNumber(el.remainingPoints, storage.getRemaining());
 
     e.target.reset();
     updatePointsCost();
@@ -217,8 +247,11 @@
     const allowance = storage.getAllowance();
     const remaining = storage.getRemaining();
     const used = Math.max(0, allowance - remaining);
-    if (el.usedPoints) el.usedPoints.textContent = String(used);
-    if (el.pointsLeftDash) el.pointsLeftDash.textContent = String(remaining);
+    user.pointsUsed = used;
+    user.pointsLeft = remaining;
+    saveUser(user);
+    if (el.usedPoints) animateNumber(el.usedPoints, used);
+    if (el.pointsLeftDash) animateNumber(el.pointsLeftDash, remaining);
   }
 
   function parseDate(d) {
@@ -227,31 +260,53 @@
 
   function renderUpcoming() {
     if (!el.upcomingList) return;
-    const now = new Date();
-    const arr = storage.getEvents()
-      .map(e => ({ ...e, startDate: parseDate(e.start) }))
-      .filter(e => e.startDate >= now)
-      .sort((a, b) => a.startDate - b.startDate)
-      .slice(0, 4);
+    const arr = user.events.slice(0, 4);
     el.upcomingList.innerHTML = '';
     arr.forEach(e => {
       const li = document.createElement('li');
       li.className = 'list-item';
       const title = document.createElement('div');
-      title.textContent = e.title;
+      title.textContent = e.name;
+      if (e.category === user.priorities[0]) title.style.color = 'var(--accent)';
       const duration = document.createElement('div');
-      const start = parseDate(e.start);
-      const end = e.end ? parseDate(e.end) : start;
-      const hrs = Math.max(1, Math.round((end - start) / (1000 * 60 * 60)));
-      duration.textContent = `${hrs} hrs`;
+      duration.textContent = `${e.duration} hrs`;
       const prog = document.createElement('div');
-      const percent = Math.min(100, Math.round((e.extendedProps.cost / storage.getAllowance()) * 100));
-      prog.innerHTML = `<span class="tag">${percent}%</span>`;
+      prog.innerHTML = `<span class="tag">${e.alignment}%</span>`;
       const btn = document.createElement('button');
       btn.textContent = 'Attend';
       btn.className = 'cta';
+      const base = e.duration * 50;
+      let finalCost = Math.round(base * (e.alignment / 100));
+      const idx = user.priorities.indexOf(e.category);
+      if (idx === 0) finalCost = Math.round(finalCost * 0.8);
+      else if (idx === 1) finalCost = Math.round(finalCost * 1.0);
+      else if (idx === 2) finalCost = Math.round(finalCost * 1.2);
+      if (user.pointsLeft < finalCost) btn.disabled = true;
       btn.addEventListener('click', () => {
-        alert('Already in calendar; manage participation via points and events form below.');
+        if (btn.disabled) return;
+        btn.disabled = true;
+        const prev = btn.textContent;
+        btn.textContent = 'Attending...';
+        setTimeout(() => {
+          const remaining = storage.getRemaining();
+          if (remaining < finalCost) {
+            btn.textContent = prev;
+            btn.disabled = true;
+            return;
+          }
+          storage.setRemaining(Math.max(0, remaining - finalCost));
+          user.eventsAttended.push({ name: e.name, category: e.category, cost: finalCost });
+          const buckets = user.dailyUsage && Array.isArray(user.dailyUsage) ? user.dailyUsage : Array(7).fill(0);
+          const today = new Date();
+          const idxDay = 6;
+          buckets[idxDay] = (buckets[idxDay] || 0) + finalCost;
+          user.dailyUsage = buckets;
+          saveUser(user);
+          renderStats();
+          renderOverview(true);
+          renderPriorities();
+          btn.textContent = 'Attended';
+        }, 400);
       });
       li.append(title, duration, prog, btn);
       el.upcomingList.appendChild(li);
@@ -260,52 +315,67 @@
 
   function renderPriorities() {
     if (!el.priorityBars) return;
-    const events = storage.getEvents();
-    const counts = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
-    events.forEach(e => { counts[e.extendedProps.priority]++; });
+    const counts = { 'Academics': 0, 'Skill Development': 0, 'Networking': 0 };
+    user.eventsAttended.forEach(e => { if (counts[e.category] !== undefined) counts[e.category] += e.cost; });
     const max = Math.max(...Object.values(counts), 1);
     el.priorityBars.innerHTML = '';
-    [5,4,3,2,1].forEach(p => {
+    [user.priorities[0], user.priorities[1], user.priorities[2]].forEach(cat => {
       const label = document.createElement('div');
       label.className = 'bar-label';
-      label.innerHTML = `<span>Priority ${p}</span><span>${counts[p]}</span>`;
+      label.innerHTML = `<span>${cat}</span><span>${counts[cat]}</span>`;
       const bar = document.createElement('div');
       bar.className = 'bar';
       const fill = document.createElement('div');
       fill.className = 'bar-fill';
-      fill.style.width = `${Math.round((counts[p]/max)*100)}%`;
-      fill.style.background = PRIORITY_COLORS[p];
+      fill.style.width = `${Math.round((counts[cat]/max)*100)}%`;
+      fill.style.background = '#f59e0b';
       bar.appendChild(fill);
       el.priorityBars.append(label, bar);
     });
   }
 
-  function renderOverview() {
+  function animateNumber(node, to) {
+    const from = parseInt(node.textContent || '0', 10);
+    const start = performance.now();
+    const dur = 300;
+    function step(now) {
+      const p = Math.min(1, (now - start) / dur);
+      const v = Math.round(from + (to - from) * p);
+      node.textContent = String(v);
+      if (p < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  function renderOverview(animated) {
     if (!el.overviewChart) return;
     const days = 7;
-    const today = new Date();
-    const buckets = Array.from({ length: days }, (_, i) => {
-      const d = new Date(today);
-      d.setDate(today.getDate() - (days - 1 - i));
-      d.setHours(0,0,0,0);
-      return { date: d, value: 0 };
-    });
-    const events = storage.getEvents();
-    events.forEach(e => {
-      const d = parseDate(e.start);
-      d.setHours(0,0,0,0);
-      const idx = buckets.findIndex(b => b.date.getTime() === d.getTime());
-      if (idx >= 0) buckets[idx].value += e.extendedProps.cost;
-    });
-    const max = Math.max(...buckets.map(b => b.value), 1);
     const w = 360, h = 100, pad = 6;
     const step = (w - pad*2) / (days - 1);
-    const points = buckets.map((b, i) => {
-      const x = pad + i * step;
-      const y = h - pad - Math.round((b.value / max) * (h - pad*2));
-      return `${x},${y}`;
-    }).join(' ');
-    el.overviewChart.innerHTML = `<svg width="${w}" height="${h}"><polyline fill="none" stroke="#f59e0b" stroke-width="2" points="${points}"/></svg>`;
+    const series = user.dailyUsage && user.dailyUsage.length === days ? user.dailyUsage.slice() : Array(days).fill(0);
+    const max = Math.max(...series, 1);
+    function toPoints(mult = 1) {
+      return series.map((val, i) => {
+        const x = pad + i * step;
+        const y = h - pad - Math.round(((val * mult) / max) * (h - pad*2));
+        return `${x},${y}`;
+      }).join(' ');
+    }
+    let t = 0;
+    function draw() {
+      const m = Math.min(1, t);
+      const points = toPoints(m);
+      el.overviewChart.innerHTML = `<svg width="${w}" height="${h}"><polyline fill="none" stroke="#f59e0b" stroke-width="2" points="${points}"/></svg>`;
+      if (m < 1) {
+        t += 0.08;
+        requestAnimationFrame(draw);
+      }
+    }
+    if (animated) draw();
+    else {
+      const points = toPoints(1);
+      el.overviewChart.innerHTML = `<svg width="${w}" height="${h}"><polyline fill="none" stroke="#f59e0b" stroke-width="2" points="${points}"/></svg>`;
+    }
   }
 
   // Bootstrap

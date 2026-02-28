@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Profile — Attention Bank</title>
+  <link rel="stylesheet" href="./styles.css" />
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/main.min.css" rel="stylesheet" />
+</head>
+
+<body class="portal-body">
+  <div class="portal-bg"></div>
+  <nav class="nav">
+    <div class="brand">Attention Bank</div>
+    <ul class="nav-links">
+      <li><a href="./index.html">Home</a></li>
+      <li><a href="./profile.html">Profile</a></li>
+      <li><a href="./settings.html">Settings</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+    <a class="cta" href="./index.html">Start Optimizing</a>
+  </nav>
+
+  <header class="app-header">
+    <h1>Profile</h1>
+    <p>Your account and attention stats.</p>
+  </header>
+
+  <main class="layout">
+    <aside class="sidebar">
+      <section class="card">
+        <h2>Account</h2>
+        <div class="field">
+          <label>Name</label>
+          <div id="profileName" class="user-detail">—</div>
+        </div>
+        <div class="field">
+          <label>Email</label>
+          <div id="profileEmail" class="user-detail">—</div>
+        </div>
+        <div class="field">
+          <a class="cta outline" href="./settings.html">Edit Info</a>
+        </div>
+      </section>
+    </aside>
+
+    <section class="content">
+      <section class="card">
+        <h2>Priorities</h2>
+        <ul id="profilePriorities" class="list large-priorities"></ul>
+      </section>
+
+      <section class="content">
+        <section class="card">
+          <h2>Attention Summary</h2>
+          <div class="grid">
+            <div class="field">
+              <label>Weekly Budget</label>
+              <div id="profileBudget" class="points">0</div>
+            </div>
+            <div class="field">
+              <label>Points Used</label>
+              <div id="profileUsed" class="points">0</div>
+            </div>
+            <div class="field">
+              <label>Points Left</label>
+              <div id="profileLeft" class="points">0</div>
+            </div>
+          </div>
+        </section>
+
+      </section>
+  </main>
+
+  <script src="./profile.js"></script>
+</body>
+
+</html>
