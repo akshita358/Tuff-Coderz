@@ -1,5 +1,107 @@
 (() => {
+<<<<<<< HEAD
+  const root = document.getElementById('portal-root');
+  if (!root) return;
+
+  function el(tag, attrs = {}, children = []) {
+    const node = document.createElement(tag);
+    Object.entries(attrs).forEach(([k, v]) => {
+      if (k === 'class') node.className = v;
+      else if (k === 'text') node.textContent = v;
+      else if (k === 'html') node.innerHTML = v;
+      else node.setAttribute(k, v);
+    });
+    children.forEach(c => node.appendChild(typeof c === 'string' ? document.createTextNode(c) : c));
+    return node;
+  }
+
+  const nav = el('nav', { class: 'nav' }, [
+    el('div', { class: 'brand', text: 'Attention Bank' }),
+    el('ul', { class: 'nav-links' }, [
+      el('li', {}, [el('a', { href: './index.html', text: 'Home' })]),
+      el('li', {}, [el('a', { href: '#', text: 'About' })]),
+    ]),
+    el('a', { class: 'cta', href: '#', text: 'Create Account' }),
+  ]);
+
+  const hero = el('section', { class: 'portal-hero' }, [
+    el('h1', { class: 'portal-title', text: 'ATTENTION BANK PORTAL' }),
+    el('p', { class: 'portal-sub', text: 'Direct your priorities, unlock your potential.' }),
+  ]);
+
+  const wrap = el('section', { class: 'portal-wrap' }, []);
+  const bg = el('div', { class: 'portal-bg' });
+  const center = el('div', { class: 'portal-center' });
+  const avRing = el('div', { class: 'avatar-ring' }, [el('div', { class: 'avatar' })]);
+
+  const card = el('div', { class: 'portal-card' });
+  const head = el('div', { class: 'portal-card-head', text: 'Login to continue your journey.' });
+  const form = el('form', { id: 'loginForm', class: 'portal-form' });
+  const f1 = el('div', { class: 'field' }, [
+    el('input', { id: 'studentName', type: 'text', placeholder: 'Enter your Student Name', required: '' }),
+  ]);
+  const f2 = el('div', { class: 'field' }, [
+    el('input', { id: 'studentEmail', type: 'email', placeholder: 'Enter your University Email or ID', required: '' }),
+  ]);
+  const f3 = el('div', { class: 'field' }, [
+    el('input', { id: 'studentPassword', type: 'password', placeholder: 'Enter your Password', minlength: '6', required: '' }),
+  ]);
+  const row = el('div', { class: 'form-row' }, [el('a', { href: '#', class: 'link muted', text: 'Forgot Password' })]);
+  const oauth = el('div', { class: 'oauth' }, [
+    el('button', { type: 'button', id: 'loginGoogle', class: 'oauth-btn google' }, [
+      el('img', { class: 'icon-img', src: 'https://www.gstatic.com/images/branding/product/1x/googleg_48dp.png', alt: 'Google' }),
+      el('span', { text: 'Continue with Google' }),
+    ]),
+    el('button', { type: 'button', id: 'loginApple', class: 'oauth-btn apple' }, [
+      el('img', { class: 'icon-img', src: 'https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg', alt: 'Apple' }),
+      el('span', { text: 'Continue with Apple' }),
+    ]),
+  ]);
+  const submit = el('button', { type: 'submit', class: 'cta primary wide', text: 'LOG IN' });
+  const row2 = el('div', { class: 'form-row center muted small' }, [
+    el('span', { text: "Don't have an account?" }),
+    el('a', { href: '#', class: 'link', text: 'Sign Up' }),
+  ]);
+
+  form.append(f1, f2, f3, row, oauth, submit, row2);
+  card.append(head, form);
+  center.append(avRing, card);
+  wrap.append(bg, center);
+
+  root.append(nav, hero, wrap);
+
+  const gBtn = document.getElementById('loginGoogle');
+  const aBtn = document.getElementById('loginApple');
+  const nameEl = document.getElementById('studentName');
+  const emailEl = document.getElementById('studentEmail');
+  const passEl = document.getElementById('studentPassword');
+
+  gBtn.addEventListener('click', () => {
+    alert('Google OAuth will be connected with backend. Use form login for now.');
+  });
+  aBtn.addEventListener('click', () => {
+    alert('Apple Sign-In will be connected with backend. Use form login for now.');
+  });
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const name = nameEl.value.trim();
+    const email = emailEl.value.trim();
+    const pass = passEl.value;
+    if (!name || !email || pass.length < 6) {
+      alert('Please fill all fields correctly.');
+      return;
+    }
+    localStorage.setItem('userName', name);
+    localStorage.setItem('userEmail', email);
+    window.location.href = './index.html';
+  });
+})();
+
+(() => {
+=======
   const USER_STORAGE_KEY = 'dashboardUser';
+>>>>>>> 17728aa50d402d309368cdde3b64925793f86c95
   const PRIORITY_WEIGHTS = {
     5: 0.5,
     4: 0.4,
@@ -131,6 +233,7 @@
   // Calendar setup
   let calendar;
   function initCalendar() {
+    if (typeof FullCalendar === 'undefined' || !el.calendar) return;
     calendar = new FullCalendar.Calendar(el.calendar, {
       initialView: 'dayGridMonth',
       height: 'auto',

@@ -7,13 +7,15 @@ import './index.css'
 
 export default function Dashboard() {
   const attended = [
+    { title: 'Data Structures & Algorithms', category: 'Computer Science', date: '28 Sep, 90:00 min', status: 'Attended', action: '✓' },
     { title: 'Mindful Cooking Class', category: 'Nutrition', date: '27 Sep, 12:23 min', status: 'Attended', action: '✓' },
-    { title: 'Sunset Yoga', category: 'Yoga', date: '27 Sep, 12:23 min', status: 'Attended', action: '✓' },
+    { title: 'Cloud Computing 101', category: 'Workshop', date: '26 Sep, 60:00 min', status: 'Attended', action: '✓' },
     { title: 'Breathwork Session', category: 'Meditation', date: '25 Sep, 10:00 min', status: 'Attended', action: '✓' },
   ]
   const upcoming = [
+    { title: 'System Design Interview Prep', category: 'Engineering', date: '30 Sep, 120:00 min', status: 'Upcoming', action: '' },
+    { title: 'Machine Learning Workshop', category: 'AI Lab', date: '02 Oct, 90:00 min', status: 'Register Now', action: '' },
     { title: 'Mindful Cooking Class', category: 'Nutrition', date: '27 Sep, 12:23 min', status: 'Upcoming', action: '' },
-    { title: 'Night Meditation', category: 'Meditation', date: '27 Sep, 12:23 min', status: 'Upcoming', action: '' },
     { title: 'Nature Walk', category: 'Wellness', date: '29 Sep, 14:00 min', status: 'Register Now', action: '' },
   ]
   return (
