@@ -1,10 +1,9 @@
 const { Sequelize, DataTypes } = require('sequelize');
-const path = require('path');
 
 // Initialize SQLite Database with Sequelize
 const sequelize = new Sequelize({
     dialect: 'sqlite',
-    storage: path.join(__dirname, '..', 'database.sqlite'),
+    storage: './database.sqlite',
     logging: false, // Set to console.log to see SQL queries
 });
 
