@@ -2,13 +2,13 @@ import React, { useState, useRef } from 'react';
 import './Settings.css';
 
 export default function Settings(props) {
-    const [priorities, setPriorities] = useState(['Academics', 'Skill', 'Networking']);
+    const [priorities, setPriorities] = useState(['Academics', 'Skill']);
     const [toggles, setToggles] = useState({
         autoAdjust: false,
         emailReminders: false,
         eventAlerts: false,
         weeklySummary: false,
-        twoFactor: false
+        twoFactor: true
     });
 
     const handlePriorityClick = (key) => {
@@ -59,7 +59,7 @@ export default function Settings(props) {
                         </h2>
                         <ul className="list nav-list">
                             <li><a className="link nav-link" href="./index.html">Dashboard</a></li>
-                            <li><span className="muted nav-link active">Settings</span></li>
+                            <li><span className="nav-link active">Settings</span></li>
                         </ul>
                     </section>
                 </aside>
@@ -142,11 +142,13 @@ export default function Settings(props) {
                                         <label>Auto-adjust priorities</label>
                                         <span className="small muted">Dynamically adapt based on upcoming deadlines</span>
                                     </div>
-                                    <label className="switch" htmlFor="autoAdjust">
-                                        <input id="autoAdjust" type="checkbox" checked={toggles.autoAdjust} onChange={() => handleToggle('autoAdjust')} />
-                                        <span className="slider round"></span>
-                                    </label>
-                                    <span id="autoAdjustLabel" className="status-label" style={{ color: toggles.autoAdjust ? 'var(--accent)' : 'var(--muted)' }}>{toggles.autoAdjust ? 'On' : 'Off'}</span>
+                                    <div className="switch-group" style={{ width: 'auto' }}>
+                                        <label className="switch" htmlFor="autoAdjust">
+                                            <input id="autoAdjust" type="checkbox" checked={toggles.autoAdjust} onChange={() => handleToggle('autoAdjust')} />
+                                            <span className="slider round"></span>
+                                        </label>
+                                        <span id="autoAdjustLabel" className="status-label" style={{ color: toggles.autoAdjust ? 'var(--accent)' : 'var(--muted)' }}>{toggles.autoAdjust ? 'On' : 'Off'}</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -219,11 +221,13 @@ export default function Settings(props) {
                             <div className="field toggle-field">
                                 <div className="toggle-wrapper compact">
                                     <label htmlFor="toggleTwoFactor" className="security-label">Two-factor auth</label>
-                                    <label className="switch" htmlFor="toggleTwoFactor">
-                                        <input id="toggleTwoFactor" type="checkbox" checked={toggles.twoFactor} onChange={() => handleToggle('twoFactor')} />
-                                        <span className="slider round"></span>
-                                    </label>
-                                    <span id="labelTwoFactor" className="status-label" style={{ color: toggles.twoFactor ? 'var(--accent)' : 'var(--muted)' }}>{toggles.twoFactor ? 'On' : 'Off'}</span>
+                                    <div className="switch-group" style={{ width: 'auto' }}>
+                                        <label className="switch" htmlFor="toggleTwoFactor">
+                                            <input id="toggleTwoFactor" type="checkbox" checked={toggles.twoFactor} onChange={() => handleToggle('twoFactor')} />
+                                            <span className="slider round"></span>
+                                        </label>
+                                        <span id="labelTwoFactor" className="status-label" style={{ color: toggles.twoFactor ? 'var(--accent)' : 'var(--muted)' }}>{toggles.twoFactor ? 'On' : 'Off'}</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
