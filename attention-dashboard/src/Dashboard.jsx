@@ -17,6 +17,7 @@ export default function Dashboard({ onNavigate }) {
     }
   });
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [notification, setNotification] = useState(null);
 
   useEffect(() => {
     // In production, token comes from AuthContext
@@ -44,6 +45,8 @@ export default function Dashboard({ onNavigate }) {
         body: JSON.stringify({ events: [event] })
       });
       if (res.ok) {
+        setNotification({ message: 'Event added successfully! 🎉', type: 'success' });
+        setTimeout(() => setNotification(null), 3000);
         // Refresh data
         const refreshRes = await fetch('http://localhost:5000/api/user/dashboard', {
           headers: { 'x-auth-token': token || '' }
@@ -53,6 +56,8 @@ export default function Dashboard({ onNavigate }) {
       }
     } catch (err) {
       console.error('Error adding event:', err);
+      setNotification({ message: 'Failed to add event. ❌', type: 'error' });
+      setTimeout(() => setNotification(null), 3000);
     }
   };
 
@@ -110,6 +115,12 @@ export default function Dashboard({ onNavigate }) {
           <div className="hero-subtitle">
             You've spent <span className="pts-highlight">{dashboardData.points.spent} points</span> and have <span className="pts-highlight">{dashboardData.points.current} points</span> remaining this week! 💎
           </div>
+          {dashboardData.points.current <= 50 && (
+            <div className="warning-banner glass-card">
+              <span className="warning-icon">⚠️</span>
+              <span className="warning-text">Half attention points left!</span>
+            </div>
+          )}
         </section>
         <div className="dashboard-grid">
           <div className="left-panel">
@@ -172,6 +183,15 @@ export default function Dashboard({ onNavigate }) {
         <div>Privacy</div>
         <div className="social">ⓕ ⓣ ⓘ</div>
       </footer>
+
+      {notification && (
+        <div className={`notification-toast glass-card ${notification.type}`}>
+          <div className="toast-content">
+            <span className="toast-icon">{notification.type === 'success' ? '✅' : '❌'}</span>
+            <span className="toast-message">{notification.message}</span>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
