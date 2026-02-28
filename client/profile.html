@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,7 +8,9 @@
   <link rel="stylesheet" href="./styles.css" />
   <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/main.min.css" rel="stylesheet" />
 </head>
-<body>
+
+<body class="portal-body">
+  <div class="portal-bg"></div>
   <nav class="nav">
     <div class="brand">Attention Bank</div>
     <ul class="nav-links">
@@ -30,49 +33,47 @@
         <h2>Account</h2>
         <div class="field">
           <label>Name</label>
-          <div id="profileName" class="points small">—</div>
+          <div id="profileName" class="user-detail">—</div>
         </div>
         <div class="field">
           <label>Email</label>
-          <div id="profileEmail" class="points small">—</div>
+          <div id="profileEmail" class="user-detail">—</div>
         </div>
         <div class="field">
-          <a class="cta" href="./settings.html">Edit Settings</a>
+          <a class="cta outline" href="./settings.html">Edit Info</a>
         </div>
-      </section>
-      <section class="card">
-        <h2>Priorities</h2>
-        <ul id="profilePriorities" class="list"></ul>
       </section>
     </aside>
 
     <section class="content">
       <section class="card">
-        <h2>Attention Summary</h2>
-        <div class="grid">
-          <div class="field">
-            <label>Weekly Budget</label>
-            <div id="profileBudget" class="points">0</div>
-          </div>
-          <div class="field">
-            <label>Points Used</label>
-            <div id="profileUsed" class="points">0</div>
-          </div>
-          <div class="field">
-            <label>Points Left</label>
-            <div id="profileLeft" class="points">0</div>
-          </div>
-        </div>
+        <h2>Priorities</h2>
+        <ul id="profilePriorities" class="list large-priorities"></ul>
       </section>
 
-      <section class="card">
-        <h2>Recent Activity</h2>
-        <ul id="profileActivity" class="list"></ul>
+      <section class="content">
+        <section class="card">
+          <h2>Attention Summary</h2>
+          <div class="grid">
+            <div class="field">
+              <label>Weekly Budget</label>
+              <div id="profileBudget" class="points">0</div>
+            </div>
+            <div class="field">
+              <label>Points Used</label>
+              <div id="profileUsed" class="points">0</div>
+            </div>
+            <div class="field">
+              <label>Points Left</label>
+              <div id="profileLeft" class="points">0</div>
+            </div>
+          </div>
+        </section>
+
       </section>
-    </section>
   </main>
 
   <script src="./profile.js"></script>
 </body>
-</html>
 
+</html>

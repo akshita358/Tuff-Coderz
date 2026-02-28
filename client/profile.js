@@ -38,29 +38,10 @@
   animate(el.used, user.pointsUsed || 0);
   animate(el.left, user.pointsLeft || 0);
   el.priorities.innerHTML = '';
-  user.priorities.forEach(p => {
+  user.priorities.forEach((p, index) => {
     const li = document.createElement('li');
-    li.textContent = p;
+    li.textContent = `${index + 1}. ${p}`;
     el.priorities.appendChild(li);
   });
-  el.activity.innerHTML = '';
-  if (!user.eventsAttended || !user.eventsAttended.length) {
-    const li = document.createElement('li');
-    li.textContent = 'No recent activity';
-    el.activity.appendChild(li);
-  } else {
-    user.eventsAttended.slice(-5).reverse().forEach(e => {
-      const li = document.createElement('li');
-      li.className = 'list-item';
-      const title = document.createElement('div');
-      title.textContent = e.name;
-      const cat = document.createElement('div');
-      cat.textContent = e.category;
-      const cost = document.createElement('div');
-      cost.innerHTML = `<span class="tag">${e.cost}</span>`;
-      el.activity.appendChild(li);
-      li.append(title, cat, cost);
-    });
-  }
 })();
 
