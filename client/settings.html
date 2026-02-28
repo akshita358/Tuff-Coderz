@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Settings — Attention Bank</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <header class="app-header">
+    <h1>Settings</h1>
+    <p>Manage your attention preferences and account.</p>
+  </header>
+
+  <main class="layout">
+    <aside class="sidebar">
+      <section class="card">
+        <h2>Navigation</h2>
+        <ul class="list">
+          <li><a class="link" href="./index.html">Dashboard</a></li>
+          <li><span class="muted">Settings</span></li>
+        </ul>
+      </section>
+    </aside>
+
+    <section class="content">
+      <div class="card" id="actionsBar" style="display:flex; justify-content:flex-end; gap:8px;">
+        <button id="cancelBtn" class="cta" style="background:#0b1220; color:var(--text); border:1px solid var(--border);">Cancel</button>
+        <button id="saveBtn" class="cta" style="background:var(--accent); color:#0b1020;">Save Changes</button>
+      </div>
+
+      <section class="card">
+        <h2>General Information</h2>
+        <div class="grid">
+          <div class="field">
+            <label for="nameInput">Name</label>
+            <input id="nameInput" type="text" placeholder="Your name" />
+            <div id="nameError" class="small" style="color:#fca5a5; display:none;">Name is required</div>
+          </div>
+          <div class="field">
+            <label for="emailInput">University email</label>
+            <input id="emailInput" type="email" placeholder="you@university.edu" />
+            <div id="emailError" class="small" style="color:#fca5a5; display:none;">Enter a valid university email</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Attention Preferences</h2>
+        <div class="grid">
+          <div class="field">
+            <label for="budgetSlider">Weekly Attention Budget</label>
+            <div style="display:flex; align-items:center; gap:10px;">
+              <input id="budgetSlider" type="range" min="50" max="200" step="1" />
+              <div id="budgetValue" class="points small">100</div>
+            </div>
+          </div>
+          <div class="field" style="grid-column: 1 / -1;">
+            <label>Priority Order</label>
+            <div id="priorityTags" style="display:flex; gap:8px; flex-wrap:wrap;">
+              <button type="button" class="tag" data-key="Academics" draggable="true">Academics</button>
+              <button type="button" class="tag" data-key="Skill" draggable="true">Skill</button>
+              <button type="button" class="tag" data-key="Networking" draggable="true">Networking</button>
+            </div>
+            <div class="small muted">Click to set ranking or drag to reorder</div>
+          </div>
+          <div class="field" style="grid-column: 1 / -1;">
+            <label>Auto-adjust priorities</label>
+            <label style="display:flex; align-items:center; gap:8px;">
+              <input id="autoAdjust" type="checkbox" />
+              <span id="autoAdjustLabel" class="muted">Off</span>
+            </label>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Notifications</h2>
+        <div class="grid" style="grid-template-columns: repeat(3, minmax(0, 1fr));">
+          <div class="field">
+            <label>Email reminders</label>
+            <label style="display:flex; align-items:center; gap:8px;">
+              <input id="toggleEmailReminders" type="checkbox" />
+              <span id="labelEmailReminders" class="muted">Off</span>
+            </label>
+          </div>
+          <div class="field">
+            <label>Event alerts</label>
+            <label style="display:flex; align-items:center; gap:8px;">
+              <input id="toggleEventAlerts" type="checkbox" />
+              <span id="labelEventAlerts" class="muted">Off</span>
+            </label>
+          </div>
+          <div class="field">
+            <label>Weekly portfolio summary</label>
+            <label style="display:flex; align-items:center; gap:8px;">
+              <input id="toggleWeeklySummary" type="checkbox" />
+              <span id="labelWeeklySummary" class="muted">Off</span>
+            </label>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Security</h2>
+        <div class="grid" style="grid-template-columns: 1fr 1fr;">
+          <div class="field">
+            <button id="changePasswordBtn">Change password</button>
+          </div>
+          <div class="field" style="display:flex; align-items:center; gap:8px;">
+            <label for="toggleTwoFactor" style="margin:0;">Two-factor authentication</label>
+            <input id="toggleTwoFactor" type="checkbox" />
+            <span id="labelTwoFactor" class="muted">Off</span>
+          </div>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <div id="toast" style="position:fixed; top:20px; right:20px; background:#0b1220; color:var(--text); border:1px solid var(--border); border-radius:8px; padding:10px 12px; box-shadow:0 4px 16px rgba(0,0,0,0.3); opacity:0; pointer-events:none; transition:opacity .25s ease;"></div>
+
+  <dialog id="passwordModal" style="border:1px solid var(--border); border-radius:12px; background:var(--surface); color:var(--text); padding:16px; width:min(420px, 92vw);">
+    <h3 style="margin-top:0;">Change Password</h3>
+    <form id="passwordForm" method="dialog">
+      <div class="field">
+        <label for="currentPass">Current password</label>
+        <input id="currentPass" type="password" />
+      </div>
+      <div class="field">
+        <label for="newPass">New password</label>
+        <input id="newPass" type="password" minlength="6" />
+      </div>
+      <div class="field">
+        <label for="confirmPass">Confirm password</label>
+        <input id="confirmPass" type="password" minlength="6" />
+        <div id="passError" class="small" style="color:#fca5a5; display:none;">Passwords do not match</div>
+      </div>
+      <div style="display:flex; justify-content:flex-end; gap:8px;">
+        <button id="closePassModal" type="button" class="cta" style="background:#0b1220; color:var(--text); border:1px solid var(--border);">Cancel</button>
+        <button id="submitPassModal" type="submit" class="cta" style="background:var(--accent); color:#0b1020;">Update</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="./settings.js"></script>
+</body>
+</html>
+

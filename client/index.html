@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Priority Bank — Student Events</title>
+  <link rel="stylesheet" href="./styles.css" />
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/main.min.css" rel="stylesheet" />
+</head>
+<body>
+  <nav class="nav">
+    <div class="brand">Attention Bank</div>
+    <ul class="nav-links">
+      <li><a href="#">Home</a></li>
+      <li><a href="#">About</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+    <button class="cta" id="heroCTA">Start Optimizing</button>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-copy">
+        <h1 class="hero-title">OPTIMIZE YOUR ATTENTION</h1>
+        <p class="hero-sub">
+          Optimize your attention points to focus on the most valuable events. Convert priorities into points and plan smarter.
+        </p>
+      </div>
+      <div class="hero-figure"></div>
+      <div class="hero-stats">
+        <div class="pill">
+          <div class="pill-icon">🎓</div>
+          <div>
+            <div class="pill-title">Active Students</div>
+            <div class="pill-value" id="activeStudents">600</div>
+          </div>
+        </div>
+        <div class="pill">
+          <div class="pill-icon">⭐</div>
+          <div>
+            <div class="pill-title">Rating</div>
+            <div class="pill-value" id="ratingValue">5.0</div>
+          </div>
+        </div>
+        <div class="pill">
+          <div class="pill-icon">🔥</div>
+          <div>
+            <div class="pill-title">Points Used</div>
+            <div class="pill-value" id="usedPoints">0</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="dashboard">
+    <div class="dash-grid">
+      <section class="card">
+        <h2>Attention Overview</h2>
+        <div id="overviewChart" class="chart"></div>
+        <div class="stats">
+          <div>Weekly Attention Usage</div>
+          <div id="pointsLeftDash" class="points">0</div>
+        </div>
+      </section>
+      <section class="card">
+        <h2>Upcoming Events</h2>
+        <ul id="upcomingList" class="list"></ul>
+      </section>
+      <section class="card">
+        <h2>Priority Order</h2>
+        <div id="priorityBars" class="bars"></div>
+      </section>
+    </div>
+  </section>
+
+  <main class="layout">
+    <aside class="sidebar">
+      <section class="card">
+        <h2>Weekly Points</h2>
+        <div class="field">
+          <label for="weeklyAllowance">Weekly allowance</label>
+          <input id="weeklyAllowance" type="number" min="10" step="10" value="100" />
+        </div>
+        <div class="field">
+          <button id="saveAllowance">Save allowance</button>
+          <button id="newWeek">Start new week</button>
+        </div>
+        <div class="stats">
+          <div>Remaining points</div>
+          <div id="remainingPoints" class="points">0</div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Legend</h2>
+        <ul class="legend" id="legend"></ul>
+      </section>
+
+      <section class="card">
+        <h2>Integrations</h2>
+        <button id="connectGoogle">Connect Google Calendar</button>
+        <p class="muted">OAuth flow stubbed for now; we’ll wire this up later.</p>
+      </section>
+    </aside>
+
+    <section class="content">
+      <section class="card">
+        <h2>Add Event</h2>
+        <form id="eventForm">
+          <div class="grid">
+            <div class="field">
+              <label for="title">Title</label>
+              <input id="title" type="text" placeholder="Event title" required />
+            </div>
+            <div class="field">
+              <label for="date">Date</label>
+              <input id="date" type="date" required />
+            </div>
+            <div class="field">
+              <label for="start">Start time</label>
+              <input id="start" type="time" required />
+            </div>
+            <div class="field">
+              <label for="end">End time</label>
+              <input id="end" type="time" required />
+            </div>
+            <div class="field">
+              <label for="priority">Priority</label>
+              <select id="priority" required>
+                <option value="5">5 — Highest</option>
+                <option value="4">4 — High</option>
+                <option value="3" selected>3 — Medium</option>
+                <option value="2">2 — Low</option>
+                <option value="1">1 — Lowest</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Points cost</label>
+              <div id="pointsCost" class="points small">0</div>
+            </div>
+          </div>
+          <div class="field">
+            <button type="submit">Participate (deduct points + add to calendar)</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="card">
+        <h2>Calendar</h2>
+        <div id="calendar"></div>
+      </section>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/main.min.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>
