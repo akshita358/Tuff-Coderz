@@ -4,24 +4,34 @@ import 'react-calendar/dist/Calendar.css';
 import './DashboardCalendar.css';
 
 export default function DashboardCalendar({ events }) {
-    // Extract all unique dates from events
-    const eventDates = events.map(e => {
-        // Basic parser for "DD Mon" format or other variants
-        const match = e.date.match(/(\d+)\s+([A-Z][a-z]+)/i);
-        if (match) {
-            const day = parseInt(match[1]);
-            const monthStr = match[2];
-            const month = new Date(`${monthStr} 1, 2026`).getMonth();
-            return new Date(2026, month, day).toDateString();
+    // Map of date strings to their highest priority status
+    const dateStatusMap = {};
+    events.forEach(e => {
+        // More robust parsing: matches "27 Sep", "Sep 27", "27th September", etc.
+        const dayMatch = e.date.match(/(\d+)/);
+        const monthMatch = e.date.match(/(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*/i);
+
+        if (dayMatch && monthMatch) {
+            const day = parseInt(dayMatch[1]);
+            const monthStr = monthMatch[1];
+            // Use current year (2026 for this app context)
+            const dateObj = new Date(`${monthStr} ${day}, 2026`);
+
+            if (!isNaN(dateObj.getTime())) {
+                const dateStr = dateObj.toDateString();
+                // "Upcoming" takes precedence for highlighting
+                if (!dateStatusMap[dateStr] || e.status === 'Upcoming') {
+                    dateStatusMap[dateStr] = e.status;
+                }
+            }
         }
-        return null;
-    }).filter(d => d !== null);
+    });
 
     const tileClassName = ({ date, view }) => {
         if (view === 'month') {
-            if (eventDates.find(d => d === date.toDateString())) {
-                return 'highlight-event';
-            }
+            const status = dateStatusMap[date.toDateString()];
+            if (status === 'Upcoming') return 'highlight-upcoming';
+            if (status === 'Attended') return 'highlight-attended';
         }
         return null;
     };
