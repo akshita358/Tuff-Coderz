@@ -6,8 +6,8 @@ export default function PreferencePage({ onComplete }) {
 
     const tiles = [
         { key: 'Academics', icon: '📚', desc: 'Classes, assignments, exams' },
-        { key: 'Skill', icon: '🎯', desc: 'Workshops, certifications, projects' },
-        { key: 'Networking', icon: '🤝', desc: 'Events, meetups, connections' }
+        { key: 'Skills', icon: '🎯', desc: 'Workshops, certifications, projects' },
+        { key: 'Culturals', icon: '🎭', desc: 'Events, meetups, performances' }
     ];
 
     const handleClick = (key) => {

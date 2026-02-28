@@ -33,17 +33,25 @@ export default function EventsList({ attended = [], upcoming = [], onStatusUpdat
         <div className="events-column">
           <div className="events-heading">Attended</div>
           <div className="events-list">
-            {attended.map((e, i) => (
-              <Row key={i} {...e} onStatusUpdate={onStatusUpdate} />
-            ))}
+            {attended.length > 0 ? (
+              attended.map((e, i) => (
+                <Row key={i} {...e} onStatusUpdate={onStatusUpdate} />
+              ))
+            ) : (
+              <div className="no-events-placeholder">No attended events yet</div>
+            )}
           </div>
         </div>
         <div className="events-column">
           <div className="events-heading">Upcoming</div>
           <div className="events-list">
-            {upcoming.map((e, i) => (
-              <Row key={i} {...e} onStatusUpdate={onStatusUpdate} />
-            ))}
+            {upcoming.length > 0 ? (
+              upcoming.map((e, i) => (
+                <Row key={i} {...e} onStatusUpdate={onStatusUpdate} />
+              ))
+            ) : (
+              <div className="no-events-placeholder">No upcoming events yet</div>
+            )}
           </div>
         </div>
       </div>

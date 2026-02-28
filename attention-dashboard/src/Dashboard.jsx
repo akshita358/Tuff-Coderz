@@ -8,7 +8,6 @@ import './App.css'
 import './index.css'
 
 export default function Dashboard({ onNavigate }) {
-  // ... existing state ...
   const [dashboardData, setDashboardData] = useState({
     profile: { name: '...', avatar: '?', email: '' },
     points: { current: 0, spent: 0, dailyWellness: 0 },
@@ -87,12 +86,12 @@ export default function Dashboard({ onNavigate }) {
     <div className="dashboard-container">
       <header className="topbar glass-card">
         <div className="brand">
-          <div className="logo">S</div>
           <span className="title">Attention Seekers</span>
         </div>
         <nav className="nav">
           <a className="active" style={{ cursor: 'pointer' }} onClick={() => onNavigate('dashboard')}>Dashboard</a>
           <a style={{ cursor: 'pointer' }} onClick={() => onNavigate('settings')}>Settings</a>
+          <a style={{ cursor: 'pointer', color: '#f87171' }} onClick={() => onNavigate('logout')}>Logout</a>
         </nav>
         <div className="topbar-actions">
           <div className="header-points-badge glass-card">
@@ -108,28 +107,33 @@ export default function Dashboard({ onNavigate }) {
       <main className="content">
         <section className="hero">
           <div className="hero-title">Hello {dashboardData.profile.name}!</div>
-          <div className="hero-subtitle">You have <span className="pts-highlight">{dashboardData.points.current} points</span> left to spend this week! 💎</div>
+          <div className="hero-subtitle">
+            You've spent <span className="pts-highlight">{dashboardData.points.spent} points</span> and have <span className="pts-highlight">{dashboardData.points.current} points</span> remaining this week! 💎
+          </div>
         </section>
         <div className="dashboard-grid">
           <div className="left-panel">
             <section className="stats-row">
               <StatCard
                 title="Weekly Allotment"
-                value="100"
-                subtitle="Starting budget"
+                value="100 pts"
+                subtitle="Points initially allocated"
                 className="allotment"
+                icon="💰"
               />
               <StatCard
                 title="Points Deducted"
-                value={dashboardData.points.spent.toLocaleString()}
-                subtitle="Spent on events"
+                value={`${(dashboardData.points.spent || 0).toLocaleString()} pts`}
+                subtitle="Points consumed by events"
                 className="spent"
+                icon="💸"
               />
               <StatCard
                 title="Remaining Balance"
-                value={dashboardData.points.current.toLocaleString()}
-                subtitle="Available now"
+                value={`${(dashboardData.points.current || 0).toLocaleString()} pts`}
+                subtitle="Points available to use"
                 className="remaining"
+                icon="💎"
               />
             </section>
             <section className="events-section">

@@ -4,7 +4,7 @@ import './WeeklyEventsPage.css';
 export default function WeeklyEventsPage({ onComplete }) {
     const [events, setEvents] = useState([]);
     const [title, setTitle] = useState('');
-    const [category, setCategory] = useState('Wellness');
+    const [category, setCategory] = useState('Academics');
     const [date, setDate] = useState('');
     const [status, setStatus] = useState('Upcoming');
     const [priorities, setPriorities] = useState({});
@@ -109,11 +109,9 @@ export default function WeeklyEventsPage({ onComplete }) {
                             onChange={(e) => setCategory(e.target.value)}
                             className="glass-input"
                         >
-                            <option>Wellness</option>
-                            <option>Academic</option>
-                            <option>Sport</option>
-                            <option>Social</option>
-                            <option>Other</option>
+                            <option>Academics</option>
+                            <option>Skills</option>
+                            <option>Culturals</option>
                         </select>
                     </div>
                     <div className="input-field">
