@@ -1,8 +1,8 @@
 import React from 'react'
 
-export default function StatCard({ title, value, subtitle, icon }) {
+export default function StatCard({ title, value, subtitle, icon, className }) {
   return (
-    <div className="stat-card">
+    <div className={`stat-card ${className || ''}`}>
       <div className="stat-card-header">
         <div className="stat-card-title">{title}</div>
       </div>

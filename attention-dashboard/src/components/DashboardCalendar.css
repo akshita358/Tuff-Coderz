@@ -1,11 +1,12 @@
 .calendar-container {
-    padding: 12px;
-    margin-top: 16px;
+    padding: 10px;
+    margin-top: 12px;
     display: flex;
     justify-content: center;
     animation: fadeIn 0.8s ease-out;
-    max-width: 320px;
-    margin-left: auto;
+    max-width: 280px;
+    margin-left: 0;
+    /* Move to the left of its container */
     margin-right: auto;
 }
 
@@ -15,7 +16,7 @@
     width: 100% !important;
     color: #e2e8f0 !important;
     font-family: inherit !important;
-    font-size: 0.85rem !important;
+    font-size: 0.75rem !important;
 }
 
 /* React Calendar Overrides */
@@ -39,8 +40,8 @@
 }
 
 .react-calendar__tile {
-    padding: 0.8em 0.4em !important;
-    border-radius: 8px !important;
+    padding: 0.6em 0.2em !important;
+    border-radius: 6px !important;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
     font-weight: 500 !important;
 }
@@ -64,21 +65,39 @@
     box-shadow: 0 0 20px rgba(139, 92, 246, 0.5) !important;
 }
 
-.highlight-event {
+.highlight-upcoming,
+.highlight-attended {
     position: relative;
 }
 
-.highlight-event::after {
+.highlight-upcoming::after {
     content: '';
     position: absolute;
-    bottom: 8px;
+    bottom: 4px;
     left: 50%;
     transform: translateX(-50%);
     width: 6px;
+    /* Slightly larger */
     height: 6px;
-    background: #8b5cf6;
+    background: #a78bfa;
+    /* Brighter purple */
     border-radius: 50%;
-    box-shadow: 0 0 10px #8b5cf6;
+    box-shadow: 0 0 12px #8b5cf6, 0 0 4px #fff;
+    /* Stronger glow */
+}
+
+.highlight-attended::after {
+    content: '';
+    position: absolute;
+    bottom: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 5px;
+    height: 5px;
+    background: #4ade80;
+    /* Changed to green for attended/success */
+    border-radius: 50%;
+    box-shadow: 0 0 8px rgba(74, 222, 128, 0.5);
 }
 
 .react-calendar__tile--neighboringMonth {

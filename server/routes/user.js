@@ -182,4 +182,23 @@ router.post('/events/bulk', auth, async (req, res) => {
     }
 });
 
+// PATCH /api/user/events/:id/status
+router.patch('/events/:id/status', auth, async (req, res) => {
+    const { status } = req.body;
+    try {
+        const event = await db.Event.findOne({
+            where: { id: req.params.id, userId: req.user.id }
+        });
+        if (!event) return res.status(404).json({ msg: 'Event not found' });
+
+        event.status = status;
+        await event.save();
+
+        res.json({ msg: 'Event status updated successfully', event });
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+});
+
 module.exports = router;

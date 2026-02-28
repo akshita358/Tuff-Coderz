@@ -6,6 +6,7 @@ export default function WeeklyEventsPage({ onComplete }) {
     const [title, setTitle] = useState('');
     const [category, setCategory] = useState('Wellness');
     const [date, setDate] = useState('');
+    const [status, setStatus] = useState('Upcoming');
     const [priorities, setPriorities] = useState({});
     const [points, setPoints] = useState(100);
 
@@ -46,7 +47,7 @@ export default function WeeklyEventsPage({ onComplete }) {
             alert("Not enough points for this event!");
             return;
         }
-        setEvents([...events, { title, category, date, status: 'Upcoming', cost }]);
+        setEvents([...events, { title, category, date, status, cost }]);
         setPoints(points - cost);
         setTitle('');
         setDate('');
@@ -82,15 +83,15 @@ export default function WeeklyEventsPage({ onComplete }) {
 
             <div className="events-card glass-card">
                 <div className="events-header">
-                    <h1 className="events-title">Weekly Planning</h1>
-                    <p className="events-subtitle">What events will you participate in this week?</p>
+                    <h1 className="events-title">Weekly Planning ✨</h1>
+                    <p className="events-subtitle">Plan your week. Every event counts!</p>
                     <div className="onboarding-points-badge glass-card">
-                        <span className="points-label">Balance: </span>
+                        <span className="points-label">Points: </span>
                         <span className="points-value">{points} pts</span>
                     </div>
                 </div>
 
-                <div className="event-input-group">
+                <div className="event-input-group status-aware-inputs">
                     <div className="input-field">
                         <label>Event Name</label>
                         <input
@@ -116,30 +117,46 @@ export default function WeeklyEventsPage({ onComplete }) {
                         </select>
                     </div>
                     <div className="input-field">
-                        <label>Date & Time</label>
+                        <label>Date</label>
                         <input
                             type="text"
-                            placeholder="e.g. 27 Sep, 12:23 min"
+                            placeholder="e.g. 27 Sep"
                             value={date}
                             onChange={(e) => setDate(e.target.value)}
                             className="glass-input"
                         />
                     </div>
-                    <button className="add-event-btn" onClick={addEvent}>Add Event</button>
+                    <div className="input-field">
+                        <label>Status</label>
+                        <select
+                            value={status}
+                            onChange={(e) => setStatus(e.target.value)}
+                            className="glass-input"
+                        >
+                            <option value="Upcoming">Upcoming</option>
+                            <option value="Attended">Attended</option>
+                        </select>
+                    </div>
+                    <button className="add-event-btn primary-cta" onClick={addEvent}>Add Event</button>
                 </div>
 
                 <div className="events-list-onboarding">
                     {events.map((event, index) => (
                         <div key={index} className="event-item-preview glass-card">
                             <div className="event-info">
-                                <div className="event-name">{event.title}</div>
+                                <div className="event-name">
+                                    {event.title}
+                                    <span className={`status-pill ${event.status.toLowerCase()}`}>
+                                        {event.status}
+                                    </span>
+                                </div>
                                 <div className="event-meta">{event.category} • {event.date} • <span className="cost-tag">-{event.cost} pts</span></div>
                             </div>
                             <button className="remove-event-btn" onClick={() => removeEvent(index)}>✕</button>
                         </div>
                     ))}
                     {events.length === 0 && (
-                        <div className="no-events-msg">No events added yet. Start planning your week!</div>
+                        <div className="no-events-msg">No events added yet. Start planning!</div>
                     )}
                 </div>
 

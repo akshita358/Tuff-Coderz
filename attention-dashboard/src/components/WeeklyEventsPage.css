@@ -132,12 +132,36 @@
 
 .event-name {
     font-weight: 600;
-    margin-bottom: 2px;
+    color: #e2e8f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.status-pill {
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+.status-pill.upcoming {
+    background: rgba(139, 92, 246, 0.2);
+    color: #c4b5fd;
+    border: 1px solid rgba(139, 92, 246, 0.3);
+}
+
+.status-pill.attended {
+    background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+    color: #fff;
 }
 
 .event-meta {
-    font-size: 12px;
+    font-size: 13px;
     color: #94a3b8;
+    margin-top: 4px;
 }
 
 .remove-event-btn {

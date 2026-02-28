@@ -1,6 +1,6 @@
 import React from 'react'
 
-function Row({ title, category, date, status, action }) {
+function Row({ id, title, category, date, status, onStatusUpdate }) {
   return (
     <div className="event-row">
       <div className="event-title">
@@ -8,12 +8,25 @@ function Row({ title, category, date, status, action }) {
         <div className="event-category">{category}</div>
       </div>
       <div className="event-date">{date}</div>
-      <div className="event-action">{action}</div>
+      <div className="event-action">
+        {status === 'Upcoming' && (
+          <button
+            className="status-pill upcoming clickable"
+            onClick={() => onStatusUpdate(id, 'Attended')}
+            title="Mark as Attended"
+          >
+            Complete
+          </button>
+        )}
+        {status === 'Attended' && (
+          <span className="status-pill attended">Done</span>
+        )}
+      </div>
     </div>
   )
 }
 
-export default function EventsList({ attended = [], upcoming = [] }) {
+export default function EventsList({ attended = [], upcoming = [], onStatusUpdate }) {
   return (
     <div className="events">
       <div className="events-columns">
@@ -21,7 +34,7 @@ export default function EventsList({ attended = [], upcoming = [] }) {
           <div className="events-heading">Attended</div>
           <div className="events-list">
             {attended.map((e, i) => (
-              <Row key={i} {...e} />
+              <Row key={i} {...e} onStatusUpdate={onStatusUpdate} />
             ))}
           </div>
         </div>
@@ -29,7 +42,7 @@ export default function EventsList({ attended = [], upcoming = [] }) {
           <div className="events-heading">Upcoming</div>
           <div className="events-list">
             {upcoming.map((e, i) => (
-              <Row key={i} {...e} />
+              <Row key={i} {...e} onStatusUpdate={onStatusUpdate} />
             ))}
           </div>
         </div>
