@@ -50,6 +50,9 @@ app.get('/api/health', (req, res) => {
 // Sync Database and start server
 db.sequelize.sync({ alter: true }).then(() => {
     console.log('Database synced successfully.');
+    const db = require("./models");
+
+    
     app.listen(PORT, () => {
         console.log(`Server is running on port: ${PORT}`);
     });
