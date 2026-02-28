@@ -5,3 +5,4 @@ ideathon doc link -
 https://docs.google.com/document/d/1OK3xaT-okogRGEhOWKwJtLgeMiUzWAxAYX5J1Zoyuok/edit?usp=sharing
 
 demo video link -
+https://drive.google.com/file/d/1HrbWtZgbwSYavD9ROcYYWlFj8IyKAhkx/view?usp=drivesdk
